@@ -12,7 +12,8 @@ import java.sql.SQLOutput;
 
 public class LoginProLinkGUI extends JFrame {
 
-    public static final Color FRAME_COLOR = Color.WHITE;
+    public static final Color FRAME_COLOR = new Color(59, 48, 217);
+    public static final Color TEXT_COLOR = Color.WHITE;
     public LoginProLinkGUI(){
 
         super("ProLink");
@@ -33,10 +34,12 @@ public class LoginProLinkGUI extends JFrame {
     private void addTextsOnGUI(){
 
         JPanel panel = new JPanel();
+        panel.setBackground(FRAME_COLOR);
         panel.setLayout(null);
 
         JLabel LoginLabel = new JLabel("Login To ProLink");
-        LoginLabel.setBounds(140, 100, 200, 50);
+        LoginLabel.setForeground(TEXT_COLOR);
+        LoginLabel.setBounds(150, 150, 200, 50);
         panel.add(LoginLabel);
 
 
@@ -64,7 +67,7 @@ public class LoginProLinkGUI extends JFrame {
         panel.add(emailTextField);
 
         JTextField passwordTextField = new JTextField(("password..."));
-        passwordTextField.setBounds(110,300,200,50);
+        passwordTextField.setBounds(110,250,200,50);
         passwordTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -81,11 +84,18 @@ public class LoginProLinkGUI extends JFrame {
         });
         panel.add(passwordTextField);
 
-        JButton LoginButton = new JButton(loadImage("src/main/java/assets/login1.png", 300,150));
-        LoginButton.setBounds(110, 400, 100,50);
+        JButton LoginButton = new JButton(loadImage("src/main/java/assets/login1.png", 220,150));
+        LoginButton.setBounds(110, 320, 180,50);
         LoginButton.setBorderPainted(false);
         LoginButton.setBackground(null);
         panel.add(LoginButton);
+
+        JButton CreateAccountButton = new JButton(loadImage("src/main/java/assets/register-button-png-11.png", 220,120));
+        CreateAccountButton.setBounds(110,360,180,50);
+        CreateAccountButton.setBorderPainted(false);
+        CreateAccountButton.setBackground(null);
+        panel.add(CreateAccountButton);
+
 
         add(panel);
 
