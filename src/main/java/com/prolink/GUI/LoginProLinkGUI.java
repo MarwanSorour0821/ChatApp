@@ -51,7 +51,7 @@ public class LoginProLinkGUI extends JFrame {
         emailTextField.setBounds(95, 200, 200, 50);
 
         //added focus listener to show what input each text box should have i.e Placeholder
-        emailTextField.addFocusListener(new FocusListener() {
+        emailTextField.addFocusListener(new FocusListener(){
             @Override
             public void focusGained(FocusEvent e) {
                 if(emailTextField.getText().equals("email address...")){
@@ -68,25 +68,28 @@ public class LoginProLinkGUI extends JFrame {
 
         panel.add(emailTextField);
 
-        JTextField passwordTextField = new JTextField(("password..."));
-        passwordTextField.setForeground(Color.GRAY);
-        passwordTextField.setBounds(95,250,200,50);
-        passwordTextField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if(passwordTextField.getText().equals("password...")){
-                    passwordTextField.setText("");
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if(passwordTextField.getText().isEmpty()){
-                    passwordTextField.setText("password...");
-                }
-            }
-        });
-        panel.add(passwordTextField);
+//        JPasswordField passwordTextField = new JPasswordField(("password..."));
+//        passwordTextField.setForeground(Color.GRAY);
+//        passwordTextField.setBounds(95,250,200,50);
+//        passwordTextField.addFocusListener(new FocusListener() {
+//            @Override
+//            public void focusGained(FocusEvent e) {
+//                if(passwordTextField.getText().equals("password...")){
+//                    passwordTextField.setText("");
+//                }
+//            }
+//            @Override
+//            public void focusLost(FocusEvent e) {
+//                if(passwordTextField.getText().isEmpty()){
+//                    passwordTextField.setText("password...");
+//                }
+//            }
+//        });
+//        panel.add(passwordTextField);
 
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(95, 250, 200, 50);
+        panel.add(passwordField);
 
         //Login button
         JButton LoginButton = new JButton(loadImage("src/main/java/assets/Login23.png", 100,60));
@@ -101,7 +104,7 @@ public class LoginProLinkGUI extends JFrame {
                 String password = "yasserYasser12";
 
                 String emailToCheck = emailTextField.getText(); // The email you want to check
-                String passwordToCheck = passwordTextField.getText();
+                String passwordToCheck = passwordField.getText();
 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String sql = "SELECT COUNT(*) FROM users WHERE user_email = ? AND user_password = ?";
@@ -137,6 +140,7 @@ public class LoginProLinkGUI extends JFrame {
         CreateAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
