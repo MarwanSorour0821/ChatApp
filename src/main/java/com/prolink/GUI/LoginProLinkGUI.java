@@ -45,7 +45,7 @@ public class LoginProLinkGUI extends JFrame {
 
         //make a text field to get user to login into ProLink
         JTextField emailTextField = new JTextField("email address...");
-
+        emailTextField.setForeground(Color.GRAY);
         emailTextField.setBounds(110, 200, 200, 50);
 
         //added focus listener to show what input each text box should have
@@ -67,6 +67,7 @@ public class LoginProLinkGUI extends JFrame {
         panel.add(emailTextField);
 
         JTextField passwordTextField = new JTextField(("password..."));
+        passwordTextField.setForeground(Color.GRAY);
         passwordTextField.setBounds(110,250,200,50);
         passwordTextField.addFocusListener(new FocusListener() {
             @Override
