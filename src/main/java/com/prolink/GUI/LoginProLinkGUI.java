@@ -3,12 +3,14 @@ package com.prolink.GUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.SocketOption;
-import java.sql.SQLOutput;
+import java.sql.*;
 
 public class LoginProLinkGUI extends JFrame {
 
@@ -39,16 +41,16 @@ public class LoginProLinkGUI extends JFrame {
 
         JLabel LoginLabel = new JLabel("Login To ProLink");
         LoginLabel.setForeground(TEXT_COLOR);
-        LoginLabel.setBounds(150, 150, 200, 50);
+        LoginLabel.setBounds(138, 150, 200, 50);
         panel.add(LoginLabel);
 
 
         //make a text field to get user to login into ProLink
         JTextField emailTextField = new JTextField("email address...");
         emailTextField.setForeground(Color.GRAY);
-        emailTextField.setBounds(110, 200, 200, 50);
+        emailTextField.setBounds(95, 200, 200, 50);
 
-        //added focus listener to show what input each text box should have
+        //added focus listener to show what input each text box should have i.e Placeholder
         emailTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -68,7 +70,7 @@ public class LoginProLinkGUI extends JFrame {
 
         JTextField passwordTextField = new JTextField(("password..."));
         passwordTextField.setForeground(Color.GRAY);
-        passwordTextField.setBounds(110,250,200,50);
+        passwordTextField.setBounds(95,250,200,50);
         passwordTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -85,16 +87,64 @@ public class LoginProLinkGUI extends JFrame {
         });
         panel.add(passwordTextField);
 
-        JButton LoginButton = new JButton(loadImage("src/main/java/assets/login1.png", 220,150));
-        LoginButton.setBounds(110, 320, 180,50);
+
+        //Login button
+        JButton LoginButton = new JButton(loadImage("src/main/java/assets/Login23.png", 100,60));
+        LoginButton.setBounds(85, 320, 110,70);
         LoginButton.setBorderPainted(false);
         LoginButton.setBackground(null);
+        LoginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String url = "jdbc:mysql://localhost:3306/chatApp";
+                String username = "root";
+                String password = "yasserYasser12";
+
+                String emailToCheck = emailTextField.getText(); // The email you want to check
+                String passwordToCheck = passwordTextField.getText();
+
+                try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                    String sql = "SELECT COUNT(*) FROM users WHERE user_email = ? AND user_password = ?";
+
+                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setString(1, emailToCheck);
+                        stmt.setString(2, passwordToCheck);
+                        try (ResultSet rs = stmt.executeQuery()) {
+                            if (rs.next()) {
+                                int count = rs.getInt(1);
+                                if (count > 0) {
+                                    //We can implement functionality here after logging in
+                                    System.out.println("Email and password match.");
+                                    activateLogInGUI();
+                                } else {
+                                    System.out.println("Email and password do not match.");
+                                }
+                            }
+                        }
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
         panel.add(LoginButton);
 
-        JButton CreateAccountButton = new JButton(loadImage("src/main/java/assets/register-button-png-11.png", 220,120));
-        CreateAccountButton.setBounds(110,360,180,50);
+        //To have the option to register in ProLink
+        JButton CreateAccountButton = new JButton(loadImage("src/main/java/assets/Signup.png", 100,60));
+        CreateAccountButton.setBounds(195,320,110,70);
         CreateAccountButton.setBorderPainted(false);
         CreateAccountButton.setBackground(null);
+        CreateAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new CreateAccountGUI().setVisible(true);
+                    }
+                });
+            }
+        });
         panel.add(CreateAccountButton);
 
 
@@ -102,7 +152,7 @@ public class LoginProLinkGUI extends JFrame {
 
     }
 
-
+    //Load images to put onto GUI
     private ImageIcon loadImage(String imagePath, int width, int height){
         try {
             // Read the image file from the given path
@@ -118,6 +168,15 @@ public class LoginProLinkGUI extends JFrame {
         }
         // Could not find resource
         return null;
+    }
+
+    private void activateLogInGUI(){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new LoggedInGUI().setVisible(true);
+            }
+        });
     }
 
 }
