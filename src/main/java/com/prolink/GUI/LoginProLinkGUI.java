@@ -68,24 +68,6 @@ public class LoginProLinkGUI extends JFrame {
 
         panel.add(emailTextField);
 
-//        JPasswordField passwordTextField = new JPasswordField(("password..."));
-//        passwordTextField.setForeground(Color.GRAY);
-//        passwordTextField.setBounds(95,250,200,50);
-//        passwordTextField.addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                if(passwordTextField.getText().equals("password...")){
-//                    passwordTextField.setText("");
-//                }
-//            }
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                if(passwordTextField.getText().isEmpty()){
-//                    passwordTextField.setText("password...");
-//                }
-//            }
-//        });
-//        panel.add(passwordTextField);
 
         JPasswordField passwordField = new JPasswordField();
         passwordField.setBounds(95, 250, 200, 50);
