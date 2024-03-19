@@ -51,6 +51,13 @@ public class CreateAccountGUI extends JFrame {
         panel.setBounds(0, 0, getWidth() - 10, 600);
         panel.setLayout(null);
 
+        //error label to appear if username and email exist
+        JLabel ExistingErrorLabel = new JLabel("Email or Username already exists OR Password Field Empty");
+        ExistingErrorLabel.setForeground(Color.RED);
+        ExistingErrorLabel.setBounds(15,400,500,50);
+        ExistingErrorLabel.setVisible(false);
+        panel.add(ExistingErrorLabel);
+
 
         JLabel CreateAccountLabel = new JLabel("Create an Account For ProLink");
         CreateAccountLabel.setForeground(Color.WHITE);
@@ -113,32 +120,31 @@ public class CreateAccountGUI extends JFrame {
                 String enteredUsername = username.getText();
                 String enteredPassword = new String(passwordField.getPassword());
 
-                if (!enteredEmail.isEmpty() && enteredEmail.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+                if (!enteredEmail.isEmpty() &&
+                        enteredEmail.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")&&
+                        !enteredPassword.isEmpty()) {
                     // Email format is valid
                     if (!isExistingUser(enteredEmail, enteredUsername)) {
                         // Email and username do not exist in the database, proceed with adding information
+                        ExistingErrorLabel.setVisible(false);
                         addInformationToTheDatabase(enteredUsername, enteredEmail, enteredPassword);
                         System.out.println("Info added successfully");
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                new LoginProLinkGUI().setVisible(true);
-                            }
-                        });
+                        SwingUtilities.invokeLater(() -> new LoginProLinkGUI().setVisible(true));
                         dispose();
                     } else {
                         // Email or username already exists in the database
                         emailTextField.setForeground(Color.RED);
                         username.setForeground(Color.RED);
                         System.out.println("Email or username already exists");
+                        ExistingErrorLabel.setVisible(true);
                     }
                 } else {
                     // Email format is invalid
+                    ExistingErrorLabel.setVisible(true);
                     emailTextField.setForeground(Color.RED);
                     System.out.println("Invalid email format");
                 }
 
-                // Dispose the current frame
             }
         });
 
