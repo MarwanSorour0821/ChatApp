@@ -44,6 +44,12 @@ public class LoginProLinkGUI extends JFrame {
         LoginLabel.setBounds(138, 150, 200, 50);
         panel.add(LoginLabel);
 
+        JLabel ErrorLabel = new JLabel("Wrong Email or Password");
+        ErrorLabel.setForeground(Color.RED);
+        ErrorLabel.setBounds(120,390,200,50);
+        ErrorLabel.setVisible(false);
+        panel.add(ErrorLabel);
+
 
         //make a text field to get user to login into ProLink
         JTextField emailTextField = new JTextField("email address...");
@@ -78,38 +84,37 @@ public class LoginProLinkGUI extends JFrame {
         LoginButton.setBounds(85, 320, 110,70);
         LoginButton.setBorderPainted(false);
         LoginButton.setBackground(null);
-        LoginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String url = "jdbc:mysql://localhost:3306/chatApp";
-                String username = "root";
-                String password = "yasserYasser12";
+        LoginButton.addActionListener(e -> {
+            String url = "jdbc:mysql://localhost:3306/chatApp";
+            String username = "root";
+            String password = "yasserYasser12";
 
-                String emailToCheck = emailTextField.getText(); // The email you want to check
-                String passwordToCheck = passwordField.getText();
+            String emailToCheck = emailTextField.getText(); // The email you want to check
+            String passwordToCheck = passwordField.getText();
 
-                try (Connection conn = DriverManager.getConnection(url, username, password)) {
-                    String sql = "SELECT COUNT(*) FROM users WHERE user_email = ? AND user_password = ?";
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                String sql = "SELECT COUNT(*) FROM users WHERE user_email = ? AND user_password = ?";
 
-                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                        stmt.setString(1, emailToCheck);
-                        stmt.setString(2, passwordToCheck);
-                        try (ResultSet rs = stmt.executeQuery()) {
-                            if (rs.next()) {
-                                int count = rs.getInt(1);
-                                if (count > 0) {
-                                    //We can implement functionality here after logging in
-                                    System.out.println("Email and password match.");
-                                    activateLogInGUI();
-                                } else {
-                                    System.out.println("Email and password do not match.");
-                                }
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setString(1, emailToCheck);
+                    stmt.setString(2, passwordToCheck);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            int count = rs.getInt(1);
+                            if (count > 0) {
+                                //We can implement functionality here after logging in
+                                ErrorLabel.setVisible(false);
+                                System.out.println("Email and password match.");
+                                activateLogInGUI();
+                            } else {
+                                System.out.println("Email and password do not match.");
+                                ErrorLabel.setVisible(true);
                             }
                         }
                     }
-                } catch (SQLException e2) {
-                    e2.printStackTrace();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         });
         panel.add(LoginButton);
@@ -163,6 +168,7 @@ public class LoginProLinkGUI extends JFrame {
                 new LoggedInGUI().setVisible(true);
             }
         });
+        dispose();
     }
 
 }
